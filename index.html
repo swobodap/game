@@ -31,32 +31,17 @@
     </style>
 </head>
 <body>
-    <button id="playButton">bruh</button>
+    <button onclick="playSound()">bruh</button>
     <audio id="sound" src="bruh.mp3"></audio>
     <div id="counter">0 clicks</div>
     <script>
         let count = 0;
-        document.getElementById('playButton').addEventListener('click', function() {
+        function playSound() {
             let sound = document.getElementById('sound');
             sound.currentTime = 0;
             sound.play();
             count++;
             document.getElementById('counter').innerText = `${count} clicks`;
-            
-            if (count === 10) {
-                downloadSecretFile();
-            }
-        });
-
-        function downloadSecretFile() {
-            let text = "Congrats on getting this file, do not share it with others, friend request swobodap";
-            let blob = new Blob([text], { type: 'text/plain' });
-            let link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = 'message.txt';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
         }
     </script>
 </body>
