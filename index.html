@@ -1,0 +1,48 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>swobodap games</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            flex-direction: column;
+        }
+        button {
+            font-size: 35px;
+            padding: 40px 60px;
+            border: 1px solid #ccc;
+            background-color: white;
+            color: black;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #f8f8f8;
+        }
+        #counter {
+            font-size: 30px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <button onclick="playSound()">bruh</button>
+    <audio id="sound" src="bruh.mp3"></audio>
+    <div id="counter">0 clicks</div>
+    <script>
+        let count = 0;
+        function playSound() {
+            let sound = document.getElementById('sound');
+            sound.currentTime = 0;
+            sound.play();
+            count++;
+            document.getElementById('counter').innerText = `${count} clicks`;
+        }
+    </script>
+</body>
+</html>
