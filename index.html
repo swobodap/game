@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -28,19 +29,12 @@
             font-size: 30px;
             margin-top: 20px;
         }
-        #milestone {
-            font-size: 25px;
-            color: red;
-            margin-top: 10px;
-            font-weight: bold;
-        }
     </style>
 </head>
 <body>
-    <button onclick="playSound()">click</button>
+    <button onclick="playSound()">bruh</button>
     <audio id="sound" src="bruh.mp3"></audio>
     <div id="counter">0 clicks</div>
-    <div id="milestone"></div>
     <script>
         let count = 0;
         function playSound() {
@@ -50,25 +44,13 @@
             count++;
             document.getElementById('counter').innerText = `${count} clicks`;
             
-            // Show milestone text at specific counts
-            let milestoneText = document.getElementById('milestone');
-            if (count === 100) {
-                milestoneText.innerText = "100 clicks, your barely there but keep going!;
-                downloadSecretFile();
-            } else if (count === 500) {
-                milestoneText.innerText = "500 clicks! keep going";
-            } else if (count === 1000) {
-                milestoneText.innerText = "your almost there, 1000 clicks";
-            } else if (count === 5000) {
-                milestoneText.innerText = "ALMOST THERE!!!";
-            } else if (count === 10000) {
-                milestoneText.innerText = "THERE WE GO!";
+            if (count === 10) {
                 downloadSecretFile();
             }
         }
 
         function downloadSecretFile() {
-            let text = "Congrats on getting this file, do not share it with others";
+            let text = "Congrats on getting this file, do not share it with others, you get to be friends with me :), send a request to swobodap.";
             let blob = new Blob([text], { type: 'text/plain' });
             let link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
