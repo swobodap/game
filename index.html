@@ -2,7 +2,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>swobodap games</title>
+    <title>Play Sound Button</title>
     <style>
         body {
             display: flex;
@@ -15,23 +15,25 @@
         button {
             font-size: 35px;
             padding: 40px 60px;
-            border: 1px solid #ccc;
-            background-color: white;
-            color: black;
-            border-radius: 4px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 8px;
             cursor: pointer;
+            transition: background 0.3s;
         }
         button:hover {
-            background-color: #f8f8f8;
+            background-color: #0056b3;
         }
         #counter {
-            font-size: 30px;
-            margin-top: 20px;
+            font-size: 20px;
+            margin-top: 10px;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <button onclick="playSound()">bruh</button>
+    <button onclick="playSound()">Play Sound</button>
     <audio id="sound" src="bruh.mp3"></audio>
     <div id="counter">0 clicks</div>
     <script>
@@ -39,7 +41,7 @@
         function playSound() {
             let sound = document.getElementById('sound');
             sound.currentTime = 0;
-            sound.play();
+            sound.play().catch(error => console.error("Audio playback error:", error));
             count++;
             document.getElementById('counter').innerText = `${count} clicks`;
         }
