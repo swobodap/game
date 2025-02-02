@@ -29,12 +29,19 @@
             font-size: 30px;
             margin-top: 20px;
         }
+        #milestone {
+            font-size: 25px;
+            color: red;
+            margin-top: 10px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
     <button onclick="playSound()">click</button>
     <audio id="sound" src="bruh.mp3"></audio>
     <div id="counter">0 clicks</div>
+    <div id="milestone"></div>
     <script>
         let count = 0;
         function playSound() {
@@ -44,22 +51,19 @@
             count++;
             document.getElementById('counter').innerText = `${count} clicks`;
             
-            // Show pop-ups and download image at milestones
-            if ([100, 500, 1000, 5000, 10000].includes(count)) {
-                alert(`congrats! you've reached ${count} clicks`);
-                downloadImage();
+            let milestoneText = document.getElementById('milestone');
+            if (count === 100) {
+                milestoneText.innerText = "100 clicks congrats I guess";
+            } else if (count === 500) {
+                milestoneText.innerText = "pro of clicking";
+            } else if (count === 1000) {
+                milestoneText.innerText = "king of clicking";
+            } else if (count === 5000) {
+                milestoneText.innerText = "legend of clicking";
+            } else if (count === 10000) {
+                milestoneText.innerText = "master of clicking";
             }
-        }
-
-        function downloadImage() {
-            let link = document.createElement('a');
-            link.href = 'face2.png';
-            link.download = 'scary_image.png';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
         }
     </script>
 </body>
 </html>
-
