@@ -1,29 +1,38 @@
-name: Node.js Backend
+name: Login Validation
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:  # Allows you to trigger this manually from the GitHub UI
 
 jobs:
-  build:
+  validate-login:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '14'
-
-    - name: Install dependencies
-      run: npm install
-
-    - name: Use multiple credentials
+    - name: Validate user credentials
       run: |
-        CREDENTIALS="${{ secrets.USER_CREDENTIALS }}"
-        
-        ADMIN_PASSWORD=$(echo $CREDENTIALS | jq -r '.admin')
+        echo "Checking credentials..."
+        SECRET="${{ secrets.user_credentials }}"
+        USERNAME="${{ github.event.inputs.username }}"
+        PASSWORD="${{ github.event.inputs.password }}"
 
-        echo "Admin Password: $ADMIN_PASSWORD"
+        # Check if the secret credentials match
+        if [[ "$SECRET" == "$USERNAME:$PASSWORD" ]]; then
+          echo "Login successful!"
+          echo "::set-output name=message::Yes"
+        else
+          echo "Invalid credentials."
+          echo "::set-output name=message::No"
+        fi
+
+    - name: Display login result
+      run: |
+        if [ "${{ steps.validate-login.outputs.message }}" == "Yes" ]; then
+          echo "Login successful, showing message!"
+          # You can return a simple HTML message or other response
+          echo "<h1>Yes, you are logged in!</h1>"
+        else
+          echo "Invalid login!"
+          echo "<h1>Invalid credentials, please try again.</h1>"
