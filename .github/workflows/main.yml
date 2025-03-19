@@ -1,28 +1,41 @@
-name: Node.js Backend Workflow
+name: HTML Login Page Workflow
 
 on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '14'
+    - name: Test if index.html exists
+      run: |
+        if [ ! -f "index.html" ]; then
+          echo "Error: index.html does not exist!" && exit 1
+        else
+          echo "index.html exists!"
+        fi
 
-    - name: Install dependencies
-      run: npm install
+    - name: Run other tests (optional)
+      run: |
 
-    - name: Run tests (optional)
-      run: npm test
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test
 
-    - name: Deploy or build (optional)
-      run: npm run build
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Deploy the HTML page (example)
+      run: |
+        echo "Deploying index.html..."
+        echo "Deployment complete!"
