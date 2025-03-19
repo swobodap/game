@@ -14,7 +14,7 @@ jobs:
     - name: Validate user credentials
       run: |
         echo "Checking credentials..."
-        SECRET="${{ secrets.user_credentials }}"
+        SECRET="${{ secrets.USER_CREDENTIALS}}"
         USERNAME="${{ github.event.inputs.username }}"
         PASSWORD="${{ github.event.inputs.password }}"
 
