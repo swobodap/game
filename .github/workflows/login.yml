@@ -18,11 +18,11 @@ jobs:
     steps:
       - name: Check credentials
         run: |
-          credentials=$(echo "${{ secrets.LOGIN_CREDENTIALS }}")
-          
-          username=$(echo $credentials | jq -r ".${{ github.event.inputs.username }}")
-          
-          if [ "$username" == "${{ github.event.inputs.password }}" ]; then
+          credentials="${{ secrets.LOGIN_CREDENTIALS }}"
+
+          stored_password=$(echo $credentials | jq -r ".${{ github.event.inputs.username }}")
+
+          if [ "$stored_password" == "${{ github.event.inputs.password }}" ]; then
             echo "Login successful"
           else
             echo "Invalid credentials"
