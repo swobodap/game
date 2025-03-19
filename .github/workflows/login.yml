@@ -1,0 +1,26 @@
+name: Login Validation
+
+on:
+  workflow_dispatch:
+    inputs:
+      username:
+        description: 'Enter your username'
+        required: true
+        type: string
+      password:
+        description: 'Enter your password'
+        required: true
+        type: string
+
+jobs:
+  validateLogin:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check credentials
+        run: |
+          if [ "${{ github.event.inputs.username }}" == "${{ secrets.GITHUB_USERNAME }}" ] && [ "${{ github.event.inputs.password }}" == "${{ secrets.GITHUB_PASSWORD }}" ]; then
+            echo "Login successful"
+          else
+            echo "Invalid credentials"
+            exit 1
+          fi
