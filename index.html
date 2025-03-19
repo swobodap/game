@@ -3,59 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="favicon.png">
-    <title>swobodap games - home</title>
-    <style>
-        body {
-            font-family: 'Merriweather', serif;
-            background-color: #f4f4f4;
-            text-align: center;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .container {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h1, p, .play-button, .info-button {
-            display: block;
-            text-align: center;
-        }
-        h1 {
-            font-size: 48px;
-            font-weight: normal;
-        }
-        p {
-            font-size: 24px;
-        }
-        .play-button, .info-button {
-            font-size: 24px;
-            background-color: white;
-            color: black;
-            border: 2px solid black;
-            padding: 10px 30px;
-            cursor: pointer;
-            display: inline-block;
-            margin-top: 20px;
-        }
-        .play-button:hover, .info-button:hover {
-            background-color: #e0e0e0;
-        }
-    </style>
+    <title>login</title>
 </head>
 <body>
-    <div class="container">
-        <h1>Mow The Lawn</h1>
-        <p>Mow The Lawn is a Roblox game made by swobodap. Inspired by MOW MY LAWN 2</p>
-        <button class="play-button" onclick="window.location.href='https://www.roblox.com/games/14606391147/Mow-The-Lawn'">Play</button>
-        <button class="info-button" onclick="window.location.href='info/'">More Info</button>
-    </div>
+    <h2>Login</h2>
+    <form action="login_backend_script" method="POST">
+        <label for="username">Username:</label><br>
+        <input type="text" id="username" name="username" required><br><br>
+        <label for="password">Password:</label><br>
+        <input type="password" id="password" name="password" required><br><br>
+        <input type="submit" value="Login">
+    </form>
 </body>
 </html>
-
