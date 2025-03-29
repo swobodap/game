@@ -65,7 +65,6 @@
                 .then(userCredential => {
                     const user = userCredential.user;
 
-                    // After user creation, set the displayName
                     updateProfile(user, {
                         displayName: username
                     }).then(() => {
