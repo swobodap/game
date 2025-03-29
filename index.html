@@ -3,9 +3,178 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>nothing</title>
+    <title>swochat</title>
 </head>
 <body>
-    <h2>to hard</h2>
+
+    <h2>Sign Up</h2>
+    <input type="text" id="signup-username" placeholder="Username">
+    <input type="email" id="signup-email" placeholder="Email">
+    <input type="password" id="signup-password" placeholder="Password">
+    <button onclick="signUp()">Sign Up</button>
+
+    <h2>Login</h2>
+    <input type="email" id="login-email" placeholder="Email">
+    <input type="password" id="login-password" placeholder="Password">
+    <button onclick="login()">Login</button>
+
+    <button onclick="logout()">Logout</button>
+
+    <h2>Status</h2>
+    <p id="user-status">Not logged in</p>
+
+    <h2>Chat</h2>
+    <div id="chat-window" style="border:1px solid #ccc; width: 300px; height: 200px; overflow-y: scroll;">
+        <p>chat</p>
+    </div>
+    <input type="text" id="message" placeholder="type your message">
+    <button onclick="sendMessage()">Send</button>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-auth.js";
+        import { getDatabase, ref, set, push, get, onValue, child } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDvCTqQl6DJuUp4zedMvhP70ZWIPHpZrJM",
+            authDomain: "database-swo-5e2e4.firebaseapp.com",
+            projectId: "database-swo-5e2e4",
+            storageBucket: "database-swo-5e2e4.appspot.com",
+            databaseURL: "https://database-swo-5e2e4-default-rtdb.firebaseio.com/",
+            appId: "1:468377059552:web:fb8dbce3243431250fd085"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getDatabase(app);
+
+        async function signUp() {
+            const username = document.getElementById('signup-username').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+
+            const usernameRef = ref(db, 'usernames/' + username);
+            const snapshot = await get(usernameRef);
+            
+            if (snapshot.exists()) {
+                alert('username is already taken');
+                return;
+            }
+
+            createUserWithEmailAndPassword(auth, email, password)
+                .then(userCredential => {
+                    const user = userCredential.user;
+
+                    // After user creation, set the displayName
+                    updateProfile(user, {
+                        displayName: username
+                    }).then(() => {
+                        console.log("DisplayName set to: " + user.displayName);
+                    }).catch(error => {
+                        console.error("error", error);
+                    });
+
+                    set(ref(db, 'users/' + user.uid), {
+                        username: username,
+                        email: email
+                    });
+
+                    set(ref(db, 'usernames/' + username), {
+                        uid: user.uid
+                    });
+
+                    alert('signed up');
+                })
+                .catch(error => {
+                    alert(error.message);
+                });
+        }
+
+        function login() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            signInWithEmailAndPassword(auth, email, password)
+                .then(userCredential => {
+                    console.log('log in succesful');
+                })
+                .catch(error => {
+                    alert(error.message);
+                });
+        }
+
+        function logout() {
+            signOut(auth)
+                .then(() => {
+                    alert('logged out');
+                })
+                .catch(error => {
+                    alert(error.message);
+                });
+        }
+
+        onAuthStateChanged(auth, async (user) => {
+            const status = document.getElementById('user-status');
+            if (user) {
+                const dbRef = ref(db);
+                try {
+                    const snapshot = await get(child(dbRef, `users/${user.uid}`));
+                    if (snapshot.exists()) {
+                        const userData = snapshot.val();
+                        status.textContent = "logged in as: " + userData.username;
+                    } else {
+                        status.textContent = "username not found.";
+                    }
+                } catch (error) {
+                    console.error("error fetching username:", error);
+                }
+            } else {
+                status.textContent = "not logged in";
+            }
+        });
+
+        function sendMessage() {
+            const message = document.getElementById('message').value;
+            const user = auth.currentUser;
+
+            if (user && message.trim() !== "") {
+                const messageRef = ref(db, 'messages');
+                const newMessageRef = push(messageRef);
+                
+                const username = user.displayName || 'Anonymous';  
+                console.log("Sending message as:", username);
+
+                set(newMessageRef, {
+                    uid: user.uid,
+                    username: username,
+                    message: message,
+                    timestamp: Date.now()
+                });
+
+                document.getElementById('message').value = "";
+            } else {
+                console.log("User not authenticated or message is empty.");
+            }
+        }
+
+        const chatWindow = document.getElementById('chat-window');
+        const messagesRef = ref(db, 'messages');
+        onValue(messagesRef, (snapshot) => {
+            chatWindow.innerHTML = '';
+            snapshot.forEach((childSnapshot) => {
+                const messageData = childSnapshot.val();
+                const messageElement = document.createElement('p');
+                messageElement.textContent = `${messageData.username}: ${messageData.message}`;
+                chatWindow.appendChild(messageElement);
+            });
+        });
+
+        window.signUp = signUp;
+        window.login = login;
+        window.logout = logout;
+        window.sendMessage = sendMessage;
+
+    </script>
+
 </body>
 </html>
